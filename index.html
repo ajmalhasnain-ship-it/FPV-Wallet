@@ -1,181 +1,389 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>FPV Wallet & Ledger — Interactive Prototype (V3) · Wiom CSP App · PR #478</title>
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FPV Wallet & Ledger — Prototype (PR #478)</title>
 <style>
-:root{--magenta:#D9008D;--ink:#161021;--ink-2:#5C5570;--ink-3:#9A9A93;--page:#FAFAF7;--card:#FFFFFF;--line:#EAE7DF;--line-2:#D8D4CA;--green:#0F7A52;--red:#C0392B;--amber:#9A6A0A;--radius:14px;--brand:#D9008D;--secondary:#4A1535;--secondaryDark:#38102a;--info:#6D17CE;--info-bg:#F1E5FF;--warn:#E2B203;--warn-bg:#FFF2BF;--warn-tx:#372902;--neg:#D92130;--neg-bg:#FFE5E7;--pos:#008043;--pos-bg:#E1FAED;--a-page:#FAF9FC;--a-card:#FFFFFF;--a-line:#E8E4F0;--a-ink:#161021;--a-ink2:#5C5570;--a-hint:#A7A1B2;--a-top:#4A1535;--a-stroke2:#D7D3E0;}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',-apple-system,'Segoe UI','Nirmala UI','Noto Sans Devanagari',system-ui,sans-serif;background:var(--page);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.55;font-size:14px}
-.wrap{max-width:1180px;margin:0 auto;padding:0 18px 60px}
-.hdr{background:var(--secondary);color:#fff;padding:26px 18px 16px}
-.hdr .in{max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
-.hdr .bc{font-size:12px;color:#e7ddf5;font-weight:600}.hdr .bc b{color:#fff}.hdr h1{font-size:22px;font-weight:800;margin-top:6px}
-.langtog{display:inline-flex;background:rgba(255,255,255,.12);border-radius:100px;padding:3px}
-.langtog button{font-family:inherit;font-size:12.5px;font-weight:700;padding:6px 15px;border-radius:100px;border:none;background:transparent;color:#e7ddf5;cursor:pointer}
-body.lang-hi .langtog .h,body.lang-en .langtog .e{background:#fff;color:var(--secondary)}
-.rule{max-width:1180px;margin:14px auto 0;font-size:14px;color:#e7ddf5}
-.section{margin-top:26px}
-.section-head{margin-bottom:16px;border-bottom:1px solid var(--line);padding-bottom:12px}
-.section-head .kicker{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--magenta);margin-bottom:4px}
-.section-head h2{font-size:19px;font-weight:800}.section-head p.sub{margin:6px 0 0;max-width:92ch;color:var(--ink-2);font-size:13.5px}
-.surf{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}.surf .s{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:12.5px;font-weight:600;color:var(--ink-2)}.surf .s b{color:var(--ink)}
-.journey{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
-.jchip{font-family:inherit;font-size:12px;font-weight:700;padding:7px 12px;border-radius:100px;border:1px solid var(--line);background:var(--card);color:var(--ink-2);cursor:pointer;white-space:nowrap;transition:.12s}
-.jchip:hover{border-color:var(--magenta)}.jchip.on{background:var(--magenta);color:#fff;border-color:var(--magenta)}.jchip .n{opacity:.6;margin-right:5px}.jchip.on .n{opacity:.85}
-.jnav{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.jbtn{font-family:inherit;font-size:13px;font-weight:700;padding:9px 15px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}.jbtn:hover{border-color:var(--magenta)}
-.jbtn.play{background:var(--magenta);color:#fff;border-color:var(--magenta);margin-left:auto}.jbtn.play.on{background:var(--red);border-color:var(--red)}
-.jpos{font-size:12.5px;color:var(--ink-3);font-weight:700}
-.proto-grid{display:grid;grid-template-columns:340px 1fr;gap:26px;align-items:start}
-.phone{width:322px;border-radius:38px;padding:8px;background:linear-gradient(160deg,#efe9f5,#e2dced);border:1px solid var(--line-2);box-shadow:0 20px 50px rgba(74,21,53,.14)}
-.scr{border-radius:31px;overflow:hidden;background:var(--a-page);position:relative;height:640px;display:flex;flex-direction:column}
-.hint{margin-top:12px;font-size:12px;color:var(--ink-3);line-height:1.5;max-width:322px}.hint b{color:var(--ink-2)}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
-.panel .ph{background:var(--secondary);color:#fff;font-size:12px;font-weight:700;letter-spacing:.03em;padding:11px 16px}
-.prow{display:grid;grid-template-columns:132px 1fr;border-bottom:1px solid var(--line)}.prow:last-child{border-bottom:none}
-.prow .k{color:var(--ink-3);padding:10px 14px;font-size:11.5px;border-right:1px solid var(--line);font-weight:600;background:#FCFBF9}
-.prow .v{padding:10px 14px;font-size:13px;color:var(--ink-2)}.prow .v b{color:var(--ink)}
-.prow .v code{font-family:ui-monospace,monospace;font-size:11.5px;background:#F3F0EA;padding:1px 5px;border-radius:5px;color:var(--ink-2)}
-.sevpill{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.04em;padding:2px 8px;border-radius:5px}
-.sevpill.info{background:var(--info-bg);color:var(--info)}.sevpill.warn{background:var(--warn-bg);color:var(--warn-tx)}.sevpill.crit{background:var(--neg-bg);color:var(--neg)}.sevpill.none{background:#EFEDE7;color:var(--ink-3)}.sevpill.pos{background:var(--pos-bg);color:var(--pos)}.sevpill.brand{background:#FFE5F6;color:var(--brand)}
-.scnote{margin-top:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;font-size:13.5px;color:var(--ink-2);line-height:1.6}.scnote b{color:var(--ink)}
-details.csec{border:1px solid var(--line);border-radius:14px;background:#fff;margin-top:16px}
-details.csec summary{list-style:none;cursor:pointer;padding:16px 18px;display:flex;align-items:center;gap:12px}details.csec summary::-webkit-details-marker{display:none}
-details.csec summary .section-head{margin:0;border-bottom:none;padding-bottom:0;flex:1}details.csec summary .section-head h2{font-size:16px}
-details.csec summary .section-head p.sub{display:none}details.csec[open] summary .section-head p.sub{display:block;margin-top:5px}
-.chev{color:var(--ink-3);font-size:12px;transition:.2s}details.csec[open] .chev{transform:rotate(90deg)}.csec .bd{padding:0 18px 18px}
-.badge{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:5px;vertical-align:middle;margin-left:8px}.b-ok{background:#E4F4EC;color:var(--green)}
-table.dt{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px}
-table.dt th,table.dt td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
-table.dt th{background:#FCFBF9;color:var(--ink-3);font-weight:700;font-size:11.5px}table.dt td b{color:var(--ink)}table.dt code{font-family:ui-monospace,monospace;font-size:11px;background:#F3F0EA;padding:1px 4px;border-radius:4px}
-.wcx{display:flex;gap:10px;padding:9px 0;border-top:1px solid var(--line)}.wcx:first-child{border-top:none}.wcx .d{flex:none;width:7px;height:7px;border-radius:50%;background:var(--magenta);margin-top:7px}.wcx b{color:var(--ink)}.wcx span{color:var(--ink-2);font-size:13.5px}
-.caveat{margin-top:14px;padding:10px 14px;border-radius:12px;font-size:12.5px;color:var(--amber);background:#F8EFDC;border:1px solid #e8d8ad}
-.foot{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink-3);font-size:12px;line-height:1.7}.foot code{background:#F3F0EA;padding:1px 5px;border-radius:4px}
-/* phone (app UI) — union */
-.statusbar{height:32px;background:var(--a-top);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 15px;font-size:11px;font-weight:600;flex:none}
-.topbar{background:var(--a-top);color:#fff;display:flex;align-items:center;gap:11px;padding:9px 13px 13px;flex:none}
-.topbar .t{font-size:14px;font-weight:700}.topbar .sub{font-size:11px;opacity:.8}.topbar .sp{flex:1}.topbar .ic{opacity:.9;font-size:14px}
-.body{flex:1;overflow-y:auto;padding:13px}.body::-webkit-scrollbar{width:0}
-.bottombar{padding:11px 14px;background:linear-gradient(0deg,var(--a-page) 72%,transparent);flex:none}
-.statgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.stat{background:var(--a-card);border:1px solid var(--a-line);border-radius:13px;padding:10px 11px;position:relative}
-.stat .l{font-size:11.5px;color:var(--a-ink2);margin-bottom:4px}.stat .v{font-size:16px;font-weight:800;color:var(--a-ink)}.stat .v small{font-size:11px;color:var(--a-ink2);font-weight:600}.stat .dot{position:absolute;top:11px;right:11px;width:7px;height:7px;border-radius:50%;background:var(--brand)}
-.warnrow{display:flex;align-items:center;gap:5px;color:var(--warn-tx);font-weight:700;font-size:13px}
-.abanner{border-radius:11px;padding:10px 11px;display:flex;gap:9px;align-items:flex-start;margin-bottom:11px;position:relative;border-left:4px solid}
-.abanner .bic{font-size:15px;flex:none}.abanner .btx b{display:block;font-size:12.5px;font-weight:700;line-height:1.35}.abanner .btx span{display:block;font-size:11px;margin-top:2px;opacity:.9}
-.abanner .chev2{position:absolute;right:9px;top:50%;transform:translateY(-50%);opacity:.5;font-size:14px}
-.abanner.info{background:var(--info-bg);border-color:var(--info);color:#3d1a66}.abanner.info .bic{color:var(--info)}
-.abanner.warn{background:var(--warn-bg);border-color:var(--warn);color:var(--warn-tx)}
-.abanner.crit{background:var(--neg-bg);border-color:var(--neg);color:#8a1520}.abanner.crit .bic{color:var(--neg)}
-.tcard{background:var(--a-card);border:1px solid var(--a-line);border-radius:13px;padding:10px 11px;margin-bottom:8px;position:relative}
-.tcard .h{display:flex;align-items:center;gap:5px;font-size:12.5px;color:var(--a-ink2);font-weight:600}.tcard .h b{color:var(--a-ink)}.tcard .m{font-size:13px;font-weight:700;color:var(--a-ink);margin-top:5px}.tcard .m.hl{background:#FFF3D6;display:inline-block;padding:1px 5px;border-radius:4px}
-.tcard .badge2{position:absolute;top:10px;right:10px;min-width:19px;height:19px;border-radius:50%;background:var(--brand);color:#fff;font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 5px}
-.fcat{font-size:11.5px;color:var(--a-ink2);margin-bottom:3px}.fhead{font-size:17px;font-weight:700;color:var(--a-ink);line-height:1.3}.ftime{font-size:12.5px;color:var(--brand);font-weight:600;margin-top:5px}.fbody{font-size:12.5px;color:var(--a-ink2);margin-top:6px;line-height:1.5}
-.fcard{background:var(--a-card);border:1px solid var(--a-line);border-radius:14px;padding:13px;margin-top:13px}.fcard .ct{font-size:13.5px;font-weight:800;color:var(--a-ink);margin-bottom:11px}
-.inforow2{display:flex;gap:10px;font-size:12.5px;margin-bottom:8px}.inforow2:last-child{margin-bottom:0}.inforow2 .k{color:var(--a-hint);width:74px;flex:none;font-size:11.5px}.inforow2 .v{color:var(--a-ink);font-weight:600;flex:1}
-.base-note{font-size:11.5px;color:var(--pos);margin-top:4px;line-height:1.45}
-.tl-step{display:flex;gap:11px}.tl-ico{display:flex;flex-direction:column;align-items:center;flex:none}.tl-dot{width:13px;height:13px;border-radius:50%;margin-top:2px}
-.tl-dot.done{background:var(--pos)}.tl-dot.cur{background:var(--brand)}.tl-dot.up{background:var(--a-stroke2)}
-.tl-line{width:2px;flex:1;min-height:20px;background:var(--a-stroke2);margin:2px 0}.tl-c{padding-bottom:13px}
-.tl-l{font-size:12.5px}.tl-l.done{color:var(--a-ink)}.tl-l.cur{color:var(--a-ink);font-weight:700}.tl-l.up{color:var(--a-ink2)}.tl-t{font-size:11px;color:var(--a-ink2)}.tl-a{font-size:11px;color:var(--a-ink2);margin-top:2px;line-height:1.4}
-.fwindow{font-size:11.5px;color:var(--a-ink2);margin-top:13px;line-height:1.5}.foutcome{font-size:13.5px;font-weight:700;color:var(--a-ink);margin-top:14px;line-height:1.45}.subnote{font-size:12.5px;color:var(--pos);margin-top:14px;line-height:1.5;font-weight:600}
-.contest{background:#FFF8DC;border:1px solid #F0E2A8;border-radius:14px;padding:13px;margin-top:14px}.contest .ct{font-size:13.5px;font-weight:800;color:var(--a-ink);margin-bottom:6px}.contest .note{font-size:11.5px;color:var(--a-ink2);line-height:1.5}.contest .dl{font-size:11.5px;color:var(--neg);font-weight:600;margin-top:6px}
-.fbtn{width:100%;margin-top:12px;font-family:inherit;font-size:13.5px;font-weight:800;padding:11px;border-radius:12px;cursor:pointer;background:transparent;color:var(--brand);border:1.5px solid var(--brand)}
-.contact .ct{font-size:13.5px;font-weight:800;color:var(--a-ink);margin-bottom:4px}.crow{display:flex;gap:11px;align-items:center;padding:8px 0;border-top:1px solid var(--a-line)}.crow:first-of-type{border-top:none}.crow .ci{color:var(--brand);font-size:16px;flex:none;width:20px;text-align:center}.crow .cl{font-size:12.5px;color:var(--a-ink);font-weight:600}.crow .cv{font-size:11px;color:var(--a-ink2)}
-.abort{background:var(--warn-bg);border-radius:14px;padding:13px;margin-top:14px}.abort .at{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:800;color:var(--a-ink)}.abort .ab{font-size:11.5px;color:var(--a-ink2);margin-top:6px;line-height:1.5}.abort .abtn{width:100%;margin-top:11px;font-family:inherit;font-size:13.5px;font-weight:800;padding:11px;border-radius:12px;cursor:pointer;background:transparent;color:var(--red);border:1.5px solid var(--red)}
-.b2note{font-size:12.5px;color:var(--a-ink2);margin-top:14px;line-height:1.5;background:var(--a-card);border:1px solid var(--a-line);border-radius:12px;padding:11px}
-.exhead{font-size:16px;font-weight:800;color:var(--a-ink);margin:4px 0 12px}
-.dcard{background:var(--a-card);border:1px solid var(--a-line);border-radius:12px;padding:13px}.dcard .bul{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--a-ink);line-height:1.5}.dcard .bul+.bul{margin-top:9px}
-.inforow{display:flex;gap:9px;align-items:flex-start;margin-top:13px;font-size:12px;color:var(--a-ink2);line-height:1.45}.inforow .ic{color:var(--info);flex:none}
-.setsec{font-size:11.5px;font-weight:700;color:var(--a-ink2);margin:13px 4px 7px}
-.setrow{background:var(--a-card);border:1px solid var(--a-line);border-radius:12px;padding:12px 13px;display:flex;align-items:center;gap:11px;margin-bottom:8px;font-size:13px;color:var(--a-ink);font-weight:600}.setrow .ic{font-size:15px}.setrow .ch{margin-left:auto;color:var(--a-hint)}
-.conseq{font-size:12.5px;color:var(--a-ink);line-height:1.55;padding:6px 0}.abortnote{display:flex;gap:9px;align-items:flex-start;margin-top:13px;font-size:12px;color:var(--a-ink2);line-height:1.45}.abortnote .ic{color:var(--info);flex:none}
-.cta{width:100%;background:var(--brand);color:#fff;border:none;border-radius:12px;padding:12px;font-family:inherit;font-size:13.5px;font-weight:800;cursor:pointer}.cta.sec{background:transparent;color:var(--brand);border:1.5px solid var(--brand)}.cta.red{background:var(--red)}
-.sheetwrap{position:absolute;inset:0;background:rgba(20,10,30,.5);display:flex;align-items:flex-end}.sheet{background:#fff;border-radius:20px 20px 0 0;width:100%;padding:18px 16px}.sheet .sh{display:flex;align-items:center;gap:10px}.sheet .gv{width:36px;height:36px;border-radius:50%;background:var(--warn-bg);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none}.sheet .st{font-size:15px;font-weight:800;color:var(--a-ink)}.sheet .sb{font-size:12.5px;color:var(--a-ink2);margin-top:9px;line-height:1.5}.sheet .sbtns{margin-top:14px;display:flex;flex-direction:column;gap:9px}.sheet .sbtn{font-family:inherit;font-size:13.5px;font-weight:800;padding:12px;border-radius:12px;cursor:pointer;border:none}.sheet .sbtn.pri{background:var(--brand);color:#fff}.sheet .sbtn.dng{background:var(--red);color:#fff}.sheet .sbtn.gho{background:transparent;color:var(--a-ink2);border:1px solid var(--a-line)}
-.confirmwrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:22px}.confirmwrap .ok{width:54px;height:54px;border-radius:50%;background:var(--pos-bg);color:var(--pos);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:13px}.confirmwrap .t{font-size:16px;font-weight:800;color:var(--a-ink)}.confirmwrap .b{font-size:12.5px;color:var(--a-ink2);margin-top:6px}.confirmwrap .msg{font-size:13.5px;font-weight:700;color:var(--a-ink);line-height:1.5}
-.earnhero{background:var(--a-card);border:1px solid var(--a-line);border-radius:13px;padding:12px;margin-bottom:10px}.earnhero .big{font-size:22px;font-weight:800;color:var(--a-ink)}.earnhero .cap{font-size:11px;color:var(--a-ink2)}
-.pausecard{background:var(--warn-bg);border:1px solid #F3D3AC;border-radius:12px;padding:11px;margin-bottom:10px}.pausecard b{color:var(--warn-tx);font-size:12.5px}.pausecard span{display:block;font-size:11.5px;color:#7a4a12;margin-top:3px}
-.plancard{background:#F0E7FF;border:1px solid #DCC8F5;border-radius:12px;padding:11px}.plancard .pt{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--info);margin-bottom:5px}.plancard .pn{font-size:12px;color:var(--a-ink)}.plancard .pl{margin-top:8px;color:var(--brand);font-weight:700;font-size:12px}
-.nobanner{border:1px dashed var(--a-line);border-radius:11px;padding:12px;text-align:center;font-size:11.5px;color:var(--a-hint);margin-bottom:11px}
-body.lang-hi .en{display:none}body.lang-en .hi{display:none}
-@media(max-width:820px){.proto-grid{grid-template-columns:1fr;justify-items:center}.hint{max-width:322px}}
-</style></head>
-<body class="lang-hi">
-<header class="hdr"><div class="in">
- <div><div class="bc">Reignite CSP · <b>FPV — Wallet & Ledger</b> · <a href="https://github.com/wiom-tech/wiom-csp-app-apr09/pull/478" target="_blank" style="color:#ffb2e4">PR #478 ↗</a></div>
-  <h1><span class="hi">FPV — वॉलेट और लेजर</span><span class="en">FPV — Wallet & Ledger</span></h1></div>
- <div class="langtog"><button class="h" onclick="setLang('hi')">हिन्दी</button><button class="e" onclick="setLang('en')">English</button></div>
-</div><div class="rule"><span class="hi">जब खाता FPV जाँच में हो — वॉलेट होल्ड पर, विड्रॉल बंद; लेजर में राशि पहले <b>होल्ड</b> (कटौती नहीं), फिर फैसले पर <b>कटौती</b> या <b>रिलीज़</b>। "held ≠ lost" साफ़ दिखता है।</span><span class="en">When the account is under FPV review — wallet on hold, withdrawals blocked; in the ledger the amount is first <b>held</b> (not deducted), then on the decision either <b>deducted</b> or <b>released</b>. "held ≠ lost" is made explicit.</span></div></header>
-<div class="wrap">
- <div class="section"><div class="section-head"><div class="kicker">Surface inventory</div><h2><span class="hi">क्या-क्या सतहें</span><span class="en">Surfaces</span></h2></div><div class="surf"><div class="s"><b>Wallet</b> · FROZEN / hold state</div><div class="s"><b>Ledger</b> · FPV_DEDUCTION / RELEASED</div><div class="s"><b>होल्ड पर (कटौती नहीं)</b></div><div class="s"><b>held ≠ lost</b> framing</div></div></div>
- <div class="section" id="proto">
-  <div class="section-head"><div class="kicker">Interactive prototype</div><h2><span class="hi">वॉलेट होल्ड और लेजर की FPV entries</span><span class="en">Wallet hold and the ledger's FPV entries</span></h2><p class="sub"><span class="hi"><b>पिछला / अगला</b> से चलें, chip से jump करें, या <b>▶ पूरा journey चलाएं</b>। ledger: entry type, direction, amount, copy key। सारा text PR #478 latest से।</span><span class="en">Step with <b>पिछला / अगला</b>, jump via a chip, or <b>▶ पूरा journey चलाएं</b>. The ledger shows entry type, direction, amount, copy key. All copy from PR #478 latest.</span></p></div>
-  <div class="journey" id="journeyRail"></div>
-  <div class="jnav"><button class="jbtn" onclick="P.step(-1)">◀ <span class="hi">पिछला</span><span class="en">Prev</span></button><div class="jpos" id="jPos"></div><button class="jbtn" onclick="P.step(1)"><span class="hi">अगला</span><span class="en">Next</span> ▶</button><button class="jbtn play" id="playBtn" onclick="P.togglePlay()">▶ <span class="hi">पूरा journey चलाएं</span><span class="en">Play full journey</span></button></div>
-  <div class="proto-grid"><div><div class="phone"><div class="scr" id="scr"></div></div><div class="hint"><span class="hi">वॉलेट होल्ड → लेजर में राशि होल्ड पर → फैसला: कटौती या रिलीज़।</span><span class="en">Wallet hold → amount on hold in the ledger → decision: deducted or released.</span></div></div>
-   <div><div class="panel"><div class="ph">Doctrine ledger — <span class="hi">यह scenario</span><span class="en">this scenario</span></div><div id="ledger"></div></div><div class="scnote" id="scNote"></div></div></div>
- </div>
- <details class="csec" open><summary><div class="section-head"><div class="kicker">What ships · fpv-wallet</div><h2><span class="hi">इस PR में क्या बदला</span><span class="en">What changed in this PR</span></h2><p class="sub"><span class="hi">wallet/ledger FPV banners — copy pass + English।</span><span class="en">wallet/ledger FPV banners — copy pass + English.</span></p></div><span class="chev">▶</span></summary><div class="bd"><div class="wcx"><div class="d"></div><span><b>Wallet hold —</b> <span class="hi">FPV जाँच पर वॉलेट FROZEN — "वॉलेट होल्ड पर है — विड्रॉल बंद है", कारण "क्वालिटी की जांच हो रही है · credits जारी"।</span><span class="en">On FPV review the wallet is FROZEN — "Wallet on hold — withdrawals blocked", reason "Quality review in progress · Credits will continue".</span></span></div><div class="wcx"><div class="d"></div><span><b>Ledger · on hold —</b> <span class="hi">राशि पहले <code>होल्ड पर (कटौती नहीं)</code> दिखती है — पैसा रुका है, गया नहीं।</span><span class="en">The amount first shows as <code>On hold (not deducted)</code> — money is held, not lost.</span></span></div><div class="wcx"><div class="d"></div><span><b>Ledger · outcome —</b> <span class="hi">फैसले पर <code>FPV_DEDUCTION</code> "खाता जाँच — कटौती" (debit) या <code>FPV_RELEASED</code> "FPV रिलीज़" (credit वापस)।</span><span class="en">On the decision, <code>FPV_DEDUCTION</code> "Account under review — deduction" (debit) or <code>FPV_RELEASED</code> "FPV released" (credited back).</span></span></div><div class="wcx"><div class="d"></div><span><b>English pass —</b> <span class="hi">सारे wallet/ledger FPV strings अब hi + en।</span><span class="en">All wallet/ledger FPV strings are now hi + en.</span></span></div></div></details>
- <details class="csec"><summary><div class="section-head"><div class="kicker">Reference</div><h2><span class="hi">पूरी copy inventory</span><span class="en">Complete copy inventory</span></h2><p class="sub"><span class="hi">हर surface की exact hi/en copy और label key।</span><span class="en">Every surface's exact hi/en copy + label key.</span></p></div><span class="chev">▶</span></summary><div class="bd"><div style="overflow-x:auto"><table class="dt" id="copyTable"></table></div></div></details>
- <details class="csec"><summary><div class="section-head"><div class="kicker">Repo fidelity</div><h2><span class="hi">कहां से बना</span><span class="en">Where this came from</span> <span class="badge b-ok">verbatim</span></h2><p class="sub">wiom-tech/wiom-csp-app-apr09 · fpv-wallet</p></div><span class="chev">▶</span></summary><div class="bd"><table class="dt"><tr><th>Source</th><th>What it gave</th></tr><tr><td><code>wallet/home__fpv_review.json · home__fpv_suspended.json</code></td><td>Wallet FROZEN/hold state, balance ₹0, liability, withdrawal blocked</td></tr><tr><td><code>wallet/ledger_entries.json</code></td><td>FPV_DEDUCTION / FPV_RELEASED / on-hold ledger rows</td></tr><tr><td><code>wallet_labels_v1.2_hi_en.json</code></td><td>wallet.* + ledger.* FPV labels (hi+en)</td></tr><tr><td><code>RealWalletRepository.kt · WalletApiService.kt</code></td><td>wire the FPV wallet/ledger through</td></tr></table></div></details>
- <div class="foot"><div>PR #478 · <code>fpv-wallet</code> · commit <code>fpv-wallet</code> · rendered from latest Compose + labels · Design Truth V3</div><div><span class="hi">इंटरैक्टिव प्रोटोटाइप · copy-accurate hi/en · self-contained · offline</span><span class="en">Interactive prototype · copy-accurate hi/en · self-contained · offline</span></div></div>
-</div>
-<script>
-function tt(o){return '<span class="hi">'+o.hi+'</span><span class="en">'+o.en+'</span>'}
-var PLAY='▶ <span class="hi">पूरा journey चलाएं</span><span class="en">Play full journey</span>',STOP='■ <span class="hi">रोकें</span><span class="en">Stop</span>';
+  :root{
+    --brand:#D9008D;
+    --ink:#1A1A1A; --ink2:#6B6B6B; --ink3:#9A9A9A;
+    --line:#ECECEC; --bg:#F4F4F6; --card:#FFFFFF;
+    --warn-bg:#FFF3E2; --warn-line:#FBD79B; --warn-ink:#9A5A00; --warn-ic:#F59E0B;
+    --crit-bg:#FDECEA; --crit-line:#F4B7B0; --crit-ink:#B4291C; --crit-ic:#E4453A;
+    --pos:#12855F; --pos-bg:#E8F6EF;
+    --hold-bg:#FFF3E2; --hold-ink:#9A5A00;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0}
+  body{
+    font-family:"Segoe UI",system-ui,"Noto Sans Devanagari",-apple-system,Roboto,sans-serif;
+    background:radial-gradient(120% 80% at 50% -10%,#2a2140 0%,#171320 55%,#100e17 100%);
+    color:#fff;min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;padding:24px 12px 60px;
+  }
+  .hdr{max-width:420px;width:100%;text-align:center;margin-bottom:14px}
+  .hdr h1{font-size:16px;margin:0 0 4px;font-weight:700;letter-spacing:.2px}
+  .hdr p{font-size:12px;margin:0;color:#b8b2c9}
+  .hdr a{color:#e79ad0;text-decoration:none}
 
-function statusbar(){return '<div class="statusbar"><span>6:10</span><span>▪▪▪ ⌃ 🔋</span></div>'}
-function topbar(title){return '<div class="topbar"><span class="ic">←</span><div class="t">'+title+'</div></div>'}
-var T={wtitle:{hi:'वॉलेट',en:'Wallet'},ltitle:{hi:'लेन-देन',en:'Ledger'},
- hold:{hi:'वॉलेट होल्ड पर है — विड्रॉल बंद है',en:'Wallet on hold — withdrawals blocked'},
- reason:{hi:'क्वालिटी की जांच हो रही है · credits जारी रहेंगे',en:'Quality review in progress · Credits will continue'},
- bal:{hi:'बैलेंस',en:'Balance'},liab:{hi:'देनदारी',en:'Liability'},
- onhold:{hi:'होल्ड पर (कटौती नहीं)',en:'On hold (not deducted)'},
- dedu:{hi:'खाता जाँच — कटौती',en:'Account under review — deduction'},
- rele:{hi:'FPV रिलीज़',en:'FPV released'},
- base:{hi:'रिचार्ज से कमाई',en:'Earned from recharge'},wd:{hi:'बैंक से विड्रॉल',en:'Withdrawal'},carry:{hi:'कैरी फीस',en:'Carry fee'}};
-function row(icon,lbl,date,amt,cls){return '<div class="crow" style="justify-content:space-between"><div style="display:flex;gap:10px;align-items:center"><span class="ci" style="color:'+cls.c+'">'+icon+'</span><div><div class="cl">'+lbl+'</div><div class="cv">'+date+'</div></div></div><div style="font-weight:800;font-size:13.5px;color:'+cls.c+'">'+amt+'</div></div>'}
-function ledger(fpvRow){return statusbar()+topbar(tt(T.ltitle))+'<div class="body">'+
-  '<div class="fcard" style="padding:4px 12px">'+fpvRow+
-  row('↑',tt(T.wd),'8 May','−₹2,000',{c:'#161021'})+
-  row('↓',tt(T.base),'7 May','+₹300',{c:'#008043'})+
-  row('•',tt(T.carry),'6 May','−₹2',{c:'#161021'})+'</div></div>'}
-var SC={
- wallet:function(){return statusbar()+topbar(tt(T.wtitle))+'<div class="body">'+
-   '<div class="pausecard" style="background:var(--neg-bg);border-color:#f3b6bc"><b style="color:var(--neg)">🔒 '+tt(T.hold)+'</b><span style="color:#8a1520">'+tt(T.reason)+'</span></div>'+
-   '<div class="earnhero"><div class="cap">'+tt(T.bal)+'</div><div class="big">₹0</div><div class="cap" style="margin-top:6px;color:var(--neg)">'+tt(T.liab)+' −₹450</div></div>'+
-   '<div class="fcard"><div class="inforow2"><span class="k">'+tt(T.wtitle)+'</span><span class="v"><span class="sevpill crit">FROZEN</span></span></div><div class="inforow2"><span class="k">'+tt({hi:'विड्रॉल',en:'Withdraw'})+'</span><span class="v">'+tt({hi:'बंद — होल्ड पर',en:'Blocked — on hold'})+'</span></div></div></div>'},
- onhold:function(){return ledger(row('⏸',tt(T.onhold),'8 May · FPV','₹500',{c:'#B35A00'}))},
- deducted:function(){return ledger(row('⛔',tt(T.dedu),'9 May · FPV','−₹500',{c:'#D92130'}))},
- released:function(){return ledger(row('✓',tt(T.rele),'9 May · FPV','+₹500',{c:'#008043'}))}
+  .ctrls{max-width:420px;width:100%;display:flex;gap:8px;margin-bottom:16px}
+  .segwrap{display:flex;flex-direction:column;flex:1}
+  .seg .lbl{display:block;font-size:9px;font-weight:600;color:#7d7391;margin:0 0 4px 4px;text-transform:uppercase;letter-spacing:.5px}
+  .lbl{display:block;font-size:9px;font-weight:600;color:#7d7391;margin:0 0 4px 4px;text-transform:uppercase;letter-spacing:.5px}
+  .seg{flex:1;display:flex;background:#221c31;border:1px solid #33294a;border-radius:12px;padding:3px}
+  .seg button{flex:1;border:0;background:transparent;color:#b8b2c9;font-size:12px;font-weight:600;
+    padding:8px 6px;border-radius:9px;cursor:pointer;font-family:inherit;transition:.15s}
+  .seg button.on{background:var(--brand);color:#fff;box-shadow:0 2px 8px rgba(217,0,141,.4)}
+
+  .phone{width:390px;max-width:100%;height:800px;background:var(--bg);border-radius:38px;
+    border:10px solid #0a0810;box-shadow:0 30px 70px rgba(0,0,0,.55);overflow:hidden;position:relative;
+    display:flex;flex-direction:column}
+  .status{height:44px;flex:0 0 44px;background:var(--card);display:flex;align-items:center;justify-content:space-between;
+    padding:0 22px 0 20px;font-size:13px;font-weight:600;color:var(--ink)}
+  .status .dots{display:flex;gap:6px;align-items:center;font-size:11px}
+  .notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:110px;height:24px;background:#0a0810;border-radius:0 0 16px 16px;z-index:5}
+
+  .topbar{background:var(--card);padding:6px 16px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line)}
+  .topbar .bk{width:34px;height:34px;border-radius:10px;background:#f4f4f6;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--ink);cursor:pointer}
+  .topbar h2{font-size:17px;margin:0;font-weight:700;color:var(--ink)}
+
+  .tabs{background:var(--card);display:flex;padding:0 16px;gap:22px;border-bottom:1px solid var(--line)}
+  .tabs .t{padding:12px 2px 11px;font-size:14px;font-weight:600;color:var(--ink3);cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1px}
+  .tabs .t.on{color:var(--brand);border-color:var(--brand)}
+
+  .scroll{overflow-y:auto;flex:1;padding:14px 14px 100px}
+  .scroll::-webkit-scrollbar{width:0}
+
+  .card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:12px;border:1px solid var(--line)}
+
+  .bal .lab{font-size:12px;color:var(--ink2);margin-bottom:4px}
+  .bal .amt{font-size:34px;font-weight:800;color:var(--ink);letter-spacing:-.5px;line-height:1}
+  .bal .sub{font-size:12px;color:var(--ink3);margin-top:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:4px 9px;border-radius:20px}
+  .chip.hold{background:var(--hold-bg);color:var(--hold-ink)}
+  .chip.frozen{background:var(--crit-bg);color:var(--crit-ink)}
+
+  .fpv{border-radius:var(--radius);padding:14px 14px 12px;margin-bottom:12px;border:1px solid}
+  .fpv.review{background:var(--warn-bg);border-color:var(--warn-line)}
+  .fpv.susp{background:var(--crit-bg);border-color:var(--crit-line)}
+  .fpv .row{display:flex;gap:11px}
+  .fpv .ic{width:34px;height:34px;border-radius:50%;flex:0 0 34px;display:flex;align-items:center;justify-content:center;font-size:18px}
+  .fpv.review .ic{background:#fde4bd;color:var(--warn-ic)}
+  .fpv.susp .ic{background:#f7cbc6;color:var(--crit-ic)}
+  .fpv .msg{font-size:13.5px;font-weight:700;line-height:1.4}
+  .fpv.review .msg{color:var(--warn-ink)}
+  .fpv.susp .msg{color:var(--crit-ink)}
+  .fpv .note{font-size:12px;line-height:1.45;margin-top:5px;display:flex;align-items:center;gap:6px}
+  .fpv.review .note{color:#7d5411}
+  .fpv.susp .note{color:#8f2b21}
+  .fpv .note .g{color:var(--pos);font-weight:800}
+  .fpv .cta{margin-top:12px;width:100%;border:0;border-radius:12px;padding:11px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;color:#fff}
+  .fpv.review .cta{background:var(--warn-ic)}
+  .fpv.susp .cta{background:var(--crit-ic)}
+
+  .rowline{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+  .rowline:last-child{border-bottom:0}
+  .rowline .k{font-size:13px;color:var(--ink2)}
+  .rowline .v{font-size:13.5px;font-weight:700;color:var(--ink)}
+
+  .sechd{font-size:12px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.6px;margin:6px 4px 8px}
+
+  .disbtn{width:100%;border:0;border-radius:12px;padding:13px;font-size:13.5px;font-weight:700;font-family:inherit;
+    background:#ededf0;color:#b0b0b6;margin-top:2px;cursor:not-allowed;display:flex;align-items:center;justify-content:center;gap:7px}
+
+  .led{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid var(--line);align-items:flex-start}
+  .led:last-child{border-bottom:0}
+  .led .lic{width:38px;height:38px;border-radius:11px;flex:0 0 38px;display:flex;align-items:center;justify-content:center;font-size:16px}
+  .lic.debit{background:#fdecea;color:var(--crit-ic)}
+  .lic.credit{background:var(--pos-bg);color:var(--pos)}
+  .lic.fpv{background:var(--warn-bg);color:var(--warn-ic)}
+  .led .body{flex:1;min-width:0}
+  .led .ti{font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.3}
+  .led .meta{font-size:11.5px;color:var(--ink3);margin-top:3px}
+  .led .sub{font-size:11.5px;color:var(--ink2);margin-top:4px}
+  .led .amt{font-size:14px;font-weight:800;white-space:nowrap;text-align:right}
+  .led .amt.credit{color:var(--pos)}
+  .led .amt.debit{color:var(--ink)}
+  .badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;margin-top:6px}
+  .badge.hold{background:var(--hold-bg);color:var(--hold-ink)}
+  .badge.done{background:#eef0f2;color:#7a7a82}
+  .badge.fail{background:var(--crit-bg);color:var(--crit-ink)}
+  .badge.proc{background:#eaf1fd;color:#2a63c4}
+
+  .toast{position:absolute;left:16px;right:16px;bottom:22px;background:#1f1a2b;color:#fff;padding:12px 15px;border-radius:12px;
+    font-size:12.5px;font-weight:600;opacity:0;transform:translateY(12px);transition:.25s;pointer-events:none;z-index:20;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+  .toast.show{opacity:1;transform:translateY(0)}
+
+  .sheetwrap{position:absolute;inset:0;background:rgba(15,12,20,.5);opacity:0;pointer-events:none;transition:.25s;z-index:30;display:flex;align-items:flex-end}
+  .sheetwrap.show{opacity:1;pointer-events:auto}
+  .sheet{background:#fff;width:100%;border-radius:22px 22px 0 0;padding:8px 18px 24px;transform:translateY(100%);transition:.3s}
+  .sheetwrap.show .sheet{transform:translateY(0)}
+  .sheet .handle{width:38px;height:4px;background:#dcdce0;border-radius:4px;margin:6px auto 14px}
+  .sheet h3{margin:0 0 6px;font-size:18px;color:var(--ink);font-weight:800}
+  .sheet p{margin:0 0 14px;font-size:13px;line-height:1.55;color:var(--ink2)}
+  .sheet .step{display:flex;gap:11px;align-items:flex-start;margin-bottom:12px}
+  .sheet .step .n{width:24px;height:24px;flex:0 0 24px;border-radius:50%;background:var(--brand);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .sheet .step .st{font-size:12.5px;color:var(--ink);line-height:1.4}
+  .sheet .pbtn{width:100%;border:0;border-radius:13px;padding:14px;background:var(--brand);color:#fff;font-size:14.5px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:6px}
+
+  .hi-only,.en-only{display:none}
+  body.lang-hi .hi-only{display:inline}
+  body.lang-en .en-only{display:inline}
+  .note-hint{max-width:420px;font-size:11px;color:#8a839b;text-align:center;margin-top:14px;line-height:1.6}
+  .note-hint code{background:#221c31;padding:1px 5px;border-radius:4px;color:#c9c1dc}
+</style>
+</head>
+<body class="lang-hi">
+
+  <div class="hdr">
+    <h1>FPV Wallet &amp; Ledger — Interactive Prototype</h1>
+    <p>PR #478 · <a href="https://github.com/wiom-tech/wiom-csp-app-apr09/pull/478" target="_blank">wiom-csp-app-apr09</a> · copy + hi/en pass · data mirrors the mock JSONs</p>
+  </div>
+
+  <div class="ctrls">
+    <div class="segwrap">
+      <span class="lbl">Language</span>
+      <div class="seg" id="langseg">
+        <button data-lang="hi" class="on">हिंदी</button>
+        <button data-lang="en">English</button>
+      </div>
+    </div>
+    <div class="segwrap">
+      <span class="lbl">FPV State</span>
+      <div class="seg" id="stateseg">
+        <button data-state="review" class="on">Under review</button>
+        <button data-state="susp">Suspended</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="status">
+      <span>9:41</span>
+      <span class="dots"><span>●●●</span><span>Wi-Fi</span><span>100%</span></span>
+    </div>
+
+    <div class="topbar">
+      <div class="bk">‹</div>
+      <h2><span class="hi-only">वॉलेट</span><span class="en-only">Wallet</span></h2>
+    </div>
+
+    <div class="tabs" id="tabs">
+      <div class="t on" data-tab="home"><span class="hi-only">होम</span><span class="en-only">Home</span></div>
+      <div class="t" data-tab="txn"><span class="hi-only">लेन-देन</span><span class="en-only">Transactions</span></div>
+    </div>
+
+    <div class="scroll" id="screen"></div>
+
+    <div class="toast" id="toast"></div>
+
+    <div class="sheetwrap" id="sheetwrap">
+      <div class="sheet" id="sheet"></div>
+    </div>
+  </div>
+
+  <div class="note-hint">
+    Toggle <b>Language</b> to see the exact <code>_en</code> strings this PR wired · Toggle <b>FPV State</b> to switch the PB·1 banner (Under review ↔ Suspended) · Tap the banner CTA to open the <code>fpv_contest</code> flow · Open <b>Transactions</b> for the PB·2 ledger with the <i>on-hold vs deducted</i> FPV entries.
+  </div>
+
+<script>
+var STATE = { lang:'hi', fpv:'review', tab:'home' };
+
+var WALLET = {
+  review:{
+    state_chip:{hi:'होल्ड',en:'On hold', cls:'hold'},
+    fpv_cls:'review', ic:'⏳',
+    msg:{hi:'आपके खाते की जाँच चल रही है — कुछ पैसे होल्ड पर हैं', en:'Your account is under review — some money is on hold'},
+    note:{hi:'आपकी रोज़ की कमाई जमा होती रहेगी', en:'Your daily earnings keep coming in'},
+    cta:{hi:'स्थिति देखें →', en:'View status →'}
+  },
+  susp:{
+    state_chip:{hi:'फ़्रोज़न',en:'Frozen', cls:'frozen'},
+    fpv_cls:'susp', ic:'⛔',
+    msg:{hi:'खाता सस्पेंडेड — निकासी रुकी है', en:'Account suspended — withdrawals stopped'},
+    note:{hi:'आपकी रोज़ की कमाई जमा होती रहेगी', en:'Your daily earnings keep coming in'},
+    cta:{hi:'अपील करें →', en:'Appeal →'}
+  }
 };
 
-var JOURNEY=[
- {"id":"wallet","ph":"Wallet","label":{"hi":"वॉलेट · होल्ड","en":"Wallet · hold"},"led":[["State","<code>FROZEN</code>"],["Balance","₹0 · liability −₹450"],["Withdrawal","<span class=\"sevpill crit\">BLOCKED</span>"],["Copy","<code>wallet.state.hold</code>"]],"note":{"hi":"FPV जाँच पर वॉलेट FROZEN — विड्रॉल बंद, पर credits जारी।","en":"On FPV review the wallet is FROZEN — withdrawals blocked, but credits continue."}},
- {"id":"onhold","ph":"Ledger","label":{"hi":"लेजर · होल्ड पर","en":"Ledger · on hold"},"led":[["Entry","<code>FPV · on hold</code>"],["Direction","held (not debited)"],["Amount","₹500 (holding)"],["Copy","<code>ledger.fpv.onHold</code>"]],"note":{"hi":"राशि \"होल्ड पर (कटौती नहीं)\" — पैसा रुका है, गया नहीं।","en":"The amount shows \"On hold (not deducted)\" — money is held, not lost."}},
- {"id":"deducted","ph":"Ledger","label":{"hi":"लेजर · कटौती","en":"Ledger · deducted"},"led":[["Entry","<code>FPV_DEDUCTION</code>"],["Direction","<span class=\"sevpill crit\">DEBIT</span>"],["Amount","−₹500"],["Copy","<code>ledger.type.FPV_DEDUCTION</code>"]],"note":{"hi":"फैसला UPHELD → \"खाता जाँच — कटौती\" debit हो जाती है।","en":"Decision UPHELD → \"Account under review — deduction\" is debited."}},
- {"id":"released","ph":"Ledger","label":{"hi":"लेजर · रिलीज़","en":"Ledger · released"},"led":[["Entry","<code>FPV_RELEASED</code>"],["Direction","<span class=\"sevpill pos\">CREDIT</span>"],["Amount","+₹500"],["Copy","<code>ledger.type.FPV_RELEASED</code>"]],"note":{"hi":"फैसला OVERTURNED → \"FPV रिलीज़\" — रोक हटी, राशि वापस।","en":"Decision OVERTURNED → \"FPV released\" — hold lifted, amount returned."}}
-];
-var COPY=[
- ["wallet.state.hold",{"hi":"वॉलेट होल्ड पर है — विड्रॉल बंद है","en":"Wallet on hold — withdrawals blocked"}],
- ["wallet.reason.financialHold",{"hi":"क्वालिटी की जांच हो रही है","en":"Quality review in progress · Credits will continue"}],
- ["wallet.blocked.holdState",{"hi":"अकाउंट अभी होल्ड पर है","en":"Account is on hold"}],
- ["ledger.fpv.onHold",{"hi":"होल्ड पर (कटौती नहीं)","en":"On hold (not deducted)"}],
- ["ledger.type.FPV_DEDUCTION",{"hi":"खाता जाँच — कटौती","en":"Account under review — deduction"}],
- ["ledger.type.FPV_RELEASED",{"hi":"FPV रिलीज़","en":"FPV released"}],
- ["wallet.payout.fpvDeduction",{"hi":"FPV कटौती","en":"FPV deduction"}]
+var L = {
+  FPV_DEDUCTION:{hi:'खाता जाँच — कटौती', en:'Account under review — deduction'},
+  onHold:{hi:'होल्ड पर (कटौती नहीं)', en:'On hold (not deducted)'},
+  WITHDRAWAL:{hi:'निकासी', en:'Withdrawal'},
+  BASE_PAYOUT:{hi:'रोज़ की कमाई', en:'Base payout'},
+  CARRY_FEE:{hi:'कैरी फ़ीस', en:'Carry fee'},
+  BONUS_CREDIT:{hi:'बोनस', en:'Bonus credit'},
+  LIABILITY_AUTO_ADJUST:{hi:'देनदारी समायोजन', en:'Liability adjustment'}
+};
+
+var LEDGER = [
+  {type:'FPV_DEDUCTION', dir:'debit', amt:'-₹500', held:false,
+    cat:{hi:'डिवाइस को नुकसान',en:'Device damage'}, inst:{hi:'डिवाइस डिपॉज़िट',en:'Device deposit'},
+    date:{hi:'22 मई 2026',en:'22 May 2026'}, rel:{hi:'1 दिन पहले',en:'1 day ago'}},
+  {type:'FPV_DEDUCTION', dir:'debit', amt:'₹500', held:true,
+    cat:{hi:'डिवाइस को नुकसान',en:'Device damage'}, inst:{hi:'डिवाइस डिपॉज़िट',en:'Device deposit'},
+    date:{hi:'15 मई 2026',en:'15 May 2026'}, rel:{hi:'8 दिन पहले',en:'8 days ago'}},
+  {type:'WITHDRAWAL', dir:'debit', amt:'-₹2,000', bank:'HDFC **** 6411', status:'proc',
+    date:{hi:'8 मई 2026',en:'8 May 2026'}, bal:'₹10,640'},
+  {type:'WITHDRAWAL', dir:'debit', amt:'-₹1,500', bank:'HDFC **** 6411', status:'fail',
+    date:{hi:'7 मई 2026',en:'7 May 2026'}, bal:'₹12,640'},
+  {type:'BASE_PAYOUT', dir:'credit', amt:'+₹300', status:'done',
+    date:{hi:'8 मई 2026',en:'8 May 2026'}, bal:'₹12,640'},
+  {type:'CARRY_FEE', dir:'debit', amt:'-₹2', status:'done',
+    date:{hi:'8 मई 2026',en:'8 May 2026'}, bal:'₹12,340'},
+  {type:'WITHDRAWAL', dir:'debit', amt:'-₹5,000', bank:'HDFC **** 6411', status:'done',
+    date:{hi:'5 अप्रैल 2026',en:'5 Apr 2026'}, bal:'₹12,342'},
+  {type:'BONUS_CREDIT', dir:'credit', amt:'+₹500', status:'done',
+    date:{hi:'3 अप्रैल 2026',en:'3 Apr 2026'}, bal:'₹17,342'},
+  {type:'LIABILITY_AUTO_ADJUST', dir:'debit', amt:'-₹150', status:'done',
+    date:{hi:'2 अप्रैल 2026',en:'2 Apr 2026'}, bal:'₹16,842'}
 ];
 
-function setLang(l){document.body.className='lang-'+l}
-var P=(function(){
- var i=0,playing=null,$=function(x){return document.getElementById(x)};
- function buildRail(){var r=$('journeyRail');r.innerHTML='';JOURNEY.forEach(function(s,idx){var b=document.createElement('button');b.className='jchip';b.innerHTML='<span class="n">'+(idx+1)+'</span>'+tt(s.label);b.onclick=function(){go(idx)};r.appendChild(b);});}
- function render(){var s=JOURNEY[i];$('scr').innerHTML=SC[s.id]();var chips=$('journeyRail').children;for(var k=0;k<chips.length;k++)chips[k].className='jchip'+(k===i?' on':'');$('jPos').innerHTML=(i+1)+' / '+JOURNEY.length+(s.ph?' · '+s.ph:'');var l=s.led,rows='';for(var r2=0;r2<l.length;r2++){rows+='<div class="prow"><div class="k">'+l[r2][0]+'</div><div class="v">'+l[r2][1]+'</div></div>';}$('ledger').innerHTML=rows;$('scNote').innerHTML=tt(s.note);}
- function go(n){i=(n+JOURNEY.length)%JOURNEY.length;render()}
- function jump(id){var idx=-1;for(var k=0;k<JOURNEY.length;k++)if(JOURNEY[k].id===id)idx=k;if(idx>=0)go(idx)}
- buildRail();render();
- if(typeof COPY!=='undefined'){var t=$('copyTable');if(t)t.innerHTML='<tr><th>Label key</th><th>हिन्दी</th><th>English</th></tr>'+COPY.map(function(c){return '<tr><td><code>'+c[0]+'</code></td><td>'+c[1].hi+'</td><td>'+c[1].en+'</td></tr>'}).join('');}
- return {step:function(d){go(i+d)},jump:jump,togglePlay:function(){var btn=$('playBtn');if(playing){clearInterval(playing);playing=null;btn.classList.remove('on');btn.innerHTML=PLAY;return}btn.classList.add('on');btn.innerHTML=STOP;playing=setInterval(function(){if(i>=JOURNEY.length-1){clearInterval(playing);playing=null;btn.classList.remove('on');btn.innerHTML=PLAY;return}go(i+1)},1900);}};
-})();
+function t(o){ return (o && o[STATE.lang]!==undefined) ? o[STATE.lang] : o; }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
 
+var STAT = {
+  proc:{hi:'प्रोसेसिंग',en:'Processing',cls:'proc'},
+  fail:{hi:'असफल',en:'Failed',cls:'fail'},
+  done:{hi:'पूरा हुआ',en:'Done',cls:'done'}
+};
+
+function renderHome(){
+  var w = WALLET[STATE.fpv];
+  return ''+
+  '<div class="card bal">'+
+    '<div class="lab">'+t({hi:'निकाल सकते हैं',en:'Available to withdraw'})+'</div>'+
+    '<div class="amt">₹0</div>'+
+    '<div class="sub"><span class="chip '+w.state_chip.cls+'">● '+t(w.state_chip)+'</span>'+
+       '<span>'+t({hi:'देनदारी',en:'Liability'})+' <b style="color:var(--crit-ink)">-₹450</b></span></div>'+
+  '</div>'+
+
+  '<div class="fpv '+w.fpv_cls+'">'+
+    '<div class="row">'+
+      '<div class="ic">'+w.ic+'</div>'+
+      '<div style="flex:1">'+
+        '<div class="msg">'+t(w.msg)+'</div>'+
+        '<div class="note"><span class="g">↑</span>'+t(w.note)+'</div>'+
+      '</div>'+
+    '</div>'+
+    '<button class="cta" onclick="openContest()">'+t(w.cta)+'</button>'+
+  '</div>'+
+
+  '<div class="card">'+
+    '<div class="sechd">'+t({hi:'डिपॉज़िट',en:'Deposit'})+'</div>'+
+    '<div class="rowline"><span class="k">'+t({hi:'कुल डिपॉज़िट',en:'Total deposit'})+'</span><span class="v">₹15,000</span></div>'+
+    '<div class="rowline"><span class="k">'+t({hi:'कस्टडी में डिवाइस',en:'Devices under custody'})+'</span><span class="v">75</span></div>'+
+  '</div>'+
+
+  '<div class="card">'+
+    '<div class="sechd">'+t({hi:'बैंक खाता',en:'Bank account'})+'</div>'+
+    '<div class="rowline"><span class="k">HDFC Bank</span><span class="v">**** 6411</span></div>'+
+    '<div class="rowline"><span class="k">'+t({hi:'खाताधारक',en:'Account holder'})+'</span><span class="v">Annu Kumar</span></div>'+
+  '</div>'+
+
+  '<button class="disbtn">🔒 '+t({hi:'पैसे निकालें',en:'Withdraw'})+' · '+t({hi:'वॉलेट होल्ड पर है',en:'Wallet is on hold'})+'</button>';
+}
+
+function renderLedgerItem(e){
+  var icCls = e.type==='FPV_DEDUCTION' ? 'fpv' : e.dir;
+  var icon = e.type==='FPV_DEDUCTION' ? '⚖️' : (e.dir==='credit' ? '↓' : (e.type==='WITHDRAWAL'?'🏦':'↑'));
+  var title = t(L[e.type]);
+  var amtCls = e.dir==='credit' ? 'credit' : 'debit';
+  var html = '<div class="led"><div class="lic '+icCls+'">'+icon+'</div><div class="body">';
+  html += '<div class="ti">'+esc(title)+'</div>';
+
+  if(e.type==='FPV_DEDUCTION'){
+    html += '<div class="sub">'+t(e.cat)+' · '+t(e.inst)+'</div>';
+    html += '<div class="meta">'+t(e.date)+' · '+t(e.rel)+'</div>';
+    if(e.held){ html += '<span class="badge hold">🔒 '+t(L.onHold)+'</span>'; }
+  } else {
+    var m = t(e.date);
+    if(e.bank) m += ' · '+e.bank;
+    html += '<div class="meta">'+m+'</div>';
+    if(e.bal) html += '<div class="meta">'+t({hi:'बैलेंस',en:'Balance'})+': '+e.bal+'</div>';
+    if(e.status && STAT[e.status]){ var s=STAT[e.status]; html += '<span class="badge '+s.cls+'">'+t(s)+'</span>'; }
+  }
+  html += '</div>';
+  var amtStyle = (e.type==='FPV_DEDUCTION' && e.held) ? 'style="color:var(--hold-ink);opacity:.75"' : '';
+  html += '<div class="amt '+amtCls+'" '+amtStyle+'>'+e.amt+'</div>';
+  html += '</div>';
+  return html;
+}
+
+function renderTxn(){
+  var out = '<div class="card" style="padding:6px 16px">';
+  out += '<div class="sechd" style="margin:12px 4px 2px">'+t({hi:'सभी लेन-देन',en:'All transactions'})+'</div>';
+  LEDGER.forEach(function(e){ out += renderLedgerItem(e); });
+  out += '</div>';
+  return out;
+}
+
+function render(){
+  document.getElementById('screen').innerHTML = STATE.tab==='home' ? renderHome() : renderTxn();
+}
+
+function openContest(){
+  var review = STATE.fpv==='review';
+  var head = review ? {hi:'खाता जाँच की स्थिति',en:'Account review status'} : {hi:'सस्पेंशन के ख़िलाफ़ अपील',en:'Appeal the suspension'};
+  var body = review
+    ? {hi:'हमारी टीम आपके खाते की जाँच कर रही है। इस दौरान कुछ पैसा होल्ड पर रहेगा, पर आपकी रोज़ की कमाई जमा होती रहेगी।',
+       en:'Our team is reviewing your account. Some money stays on hold during this time, but your daily earnings keep coming in.'}
+    : {hi:'आपका खाता सस्पेंड कर दिया गया है और निकासी रुकी है। अपील दर्ज करें, टीम 48 घंटे में जवाब देगी।',
+       en:'Your account is suspended and withdrawals are stopped. Raise an appeal — the team responds within 48 hours.'};
+  var steps = review
+    ? [{hi:'जाँच शुरू — डिवाइस डिपॉज़िट पर',en:'Review started — on device deposit'},
+       {hi:'दस्तावेज़ सत्यापन जारी',en:'Document verification in progress'},
+       {hi:'नतीजा 3–5 दिन में',en:'Outcome in 3–5 days'}]
+    : [{hi:'अपील का कारण चुनें',en:'Choose a reason for the appeal'},
+       {hi:'सबूत / फ़ोटो जोड़ें',en:'Add evidence / photos'},
+       {hi:'टीम 48 घंटे में जवाब देगी',en:'Team replies within 48 hours'}];
+  var btn = review ? {hi:'ठीक है',en:'Got it'} : {hi:'अपील दर्ज करें',en:'Submit appeal'};
+
+  var h = '<div class="handle"></div><h3>'+t(head)+'</h3><p>'+t(body)+'</p>';
+  steps.forEach(function(s,i){ h += '<div class="step"><div class="n">'+(i+1)+'</div><div class="st">'+t(s)+'</div></div>'; });
+  h += '<button class="pbtn" onclick="submitContest()">'+t(btn)+'</button>';
+  document.getElementById('sheet').innerHTML = h;
+  document.getElementById('sheetwrap').classList.add('show');
+}
+function closeSheet(){ document.getElementById('sheetwrap').classList.remove('show'); }
+function submitContest(){
+  closeSheet();
+  var msg = STATE.fpv==='review'
+    ? {hi:'हम आपको जाँच का नतीजा सूचित करेंगे ✓',en:'We’ll notify you of the review outcome ✓'}
+    : {hi:'अपील दर्ज हो गई — 48 घंटे में जवाब ✓',en:'Appeal submitted — reply within 48 hours ✓'};
+  showToast(t(msg));
+}
+var toastTimer;
+function showToast(m){
+  var el=document.getElementById('toast'); el.textContent=m; el.classList.add('show');
+  clearTimeout(toastTimer); toastTimer=setTimeout(function(){el.classList.remove('show');},2600);
+}
+document.getElementById('sheetwrap').addEventListener('click',function(e){ if(e.target===this) closeSheet(); });
+
+document.getElementById('langseg').addEventListener('click',function(e){
+  var b=e.target.closest('button'); if(!b)return;
+  STATE.lang=b.dataset.lang;
+  document.body.className='lang-'+STATE.lang;
+  [].forEach.call(this.children,function(c){c.classList.toggle('on',c===b);});
+  render();
+});
+document.getElementById('stateseg').addEventListener('click',function(e){
+  var b=e.target.closest('button'); if(!b)return;
+  STATE.fpv=b.dataset.state;
+  [].forEach.call(this.children,function(c){c.classList.toggle('on',c===b);});
+  render();
+});
+document.getElementById('tabs').addEventListener('click',function(e){
+  var b=e.target.closest('.t'); if(!b)return;
+  STATE.tab=b.dataset.tab;
+  [].forEach.call(this.children,function(c){c.classList.toggle('on',c===b);});
+  render();
+});
+
+render();
 </script>
-</body></html>
+</body>
+</html>
